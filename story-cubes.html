@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Story Cubes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <link rel="stylesheet" type="text/css" media="screen" href="StoryCubes.css" /> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Eagle+Lake&display=swap" rel="stylesheet">
+  <!-- <script src="StoryCubes.js" defer></script> -->
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <style>
+    body {
+      background-color: #794c74;
+    }
+
+    #heading {
+      font-size: 60px;
+      text-shadow: 5px 5px 6px grey;
+      color: #b2deec;
+      text-shadow: 2px 2px 2px #fadcaa;
+    }
+
+    p {
+      font-family: 'Amatic SC', cursive;
+      text-align: center;
+      font-size: 45px;
+      color: #fadcaa;
+      text-shadow: 2px 2px 2px #b2deec;
+      margin: 15px;
+    }
+
+    #cubes {
+      position: relative;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .img {
+      box-sizing: border-box;
+      background: #efefef;
+      padding: 45px;
+      width: 180px;
+      height: 180px;
+      border-radius: 20px;
+      border: solid 4px #fadcaa;
+      cursor: pointer;
+      transition: all 0.5s;
+    }
+
+    img:hover {
+      background-color: rgba(224, 147, 173, 0.9);
+      opacity: 0.9;
+      box-shadow: 1px 5px 5px rgba(224, 147, 173, 1);
+    }
+
+    .selected {
+      background-color: rgba(224, 147, 173, 0.9);
+    }
+
+    .btn-container {
+      display: flex;
+      justify-content: center;
+    }
+
+    #button {
+      text-align: center;
+      margin-top: 40px;
+      font-family: 'Amatic SC', cursive;
+      width: 300px;
+      height: 100px;
+      background-color: #b2deec;
+      border-radius: 20px;
+      border: 2px solid #fadcaa;
+      font-size: 30px;
+      cursor: pointer;
+      margin-bottom: 20px;
+      transform: scale(1);
+      transform-style: preserve-3d;
+      transition: transform 0.5s;
+    }
+
+    #button:hover {
+      box-shadow: 1px 5px 5px #fadcaa;
+      animation-name: shadow;
+      animation-duration: 1s;
+      animation-fill-mode: forwards;
+    }
+
+    @keyframes shadow {
+      from {}
+
+      to {
+        box-shadow: 5px 5px 15px #fadcaa;
+      }
+    }
+
+    #button:focus {
+      outline: none
+    }
+
+    #button:active {
+      transform: scale(0.7);
+      transition: transform .7s;
+    }
+
+    #timer {
+      background-color: #484851;
+      color: white;
+      border: 5px solid white;
+      border-radius: 15px;
+      width: 60px;
+      margin: 0 auto;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .intro {
+      font-size: 4vw;
+      font-family: 'Eagle Lake', cursive;
+    }
+
+    .first-letter {
+      font-size: 5vw;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="game-container">
+    <p id='heading'>Story Cubes</p>
+    <p>Roll the dice and tell the story. Ready?</p>
+    <p class="intro"> <span class="first-letter">O</span>nce upon a time ...</p>
+    <p id='timer'>--:--</p>
+    <div class="sortable" id='cubes'>
+      <img class="img sortable animated shake" id="dice1" src="https://img.icons8.com/dotty/80/000000/help.png" />
+      <img class="img sortable animated shake" id="dice1" src="https://img.icons8.com/dotty/80/000000/help.png" />
+      <img class="img sortable animated shake" id="dice2" src="https://img.icons8.com/dotty/80/000000/help.png" />
+      <img class="img sortable animated shake" id="dice3" src="https://img.icons8.com/dotty/80/000000/help.png" />
+      <img class="img sortable animated shake" id="dice4" src="https://img.icons8.com/dotty/80/000000/help.png" />
+      <img class="img sortable animated shake" id="dice5" src="https://img.icons8.com/dotty/80/000000/help.png" />
+    </div>
+    <div class="btn-container">
+      <button id='button'>Roll the Dice</button>
+    </div>
+  </div>
+  <script>
+
+    let pics = ['circus-tent', 'electric-bumper-car', 'cotton-candy', 'telescope', 'heart-balloon', 'skyscrapers', 'palace', 'bank-building', 'cafe', 'archeology', 'pagoda', 'ferris-wheel', 'fire-station', 'mittens', 'umbrella', 'diamond-ring', 'fashion-trend', 'recent-celebrity', 'sherlock-holmes', 'historical', 'astronaut', 'superman', 'gold-pot', 'sophia-loren', 'titanic', 'ballet-shoes', 'hair-dryer', 'lip-gloss', 'bear-footprint', 'wolf', 'clown-fish', 'mosquito', 'flamingo', 'acacia', 'mushroom', 'radish', 'eggplant', 'palm-tree', 'nut', 'cactus', 'bamboo', 'coconut', 'pineapple', 'watermelon', 'farm', 'pig', 'dog', 'grandma', 'doctor-male', 'police', 'super-hero-female', 'mime', 'volcano', 'alps', 'iceberg', 'sea-waves', 'beach', 'sun-lounger', 'summer', 'flippers', 'guitar', 'matches', 'flash-light', 'rucksack', 'lighthouse', 'statue-of-liberty', 'camping-tent', 'bear', 'treasure-chest', 'gondola', 'tram', 'helicopter', 'airplane-take-off', 'identification-documents', 'hot-air-balloon', 'launched-rocket', 'scooter', 'key-exchange', 'tornado', 'fog-night', 'storm', 'bullish', 'save-all', 'alarm-clock', 'trophy', 'skateboarding', 'bungee-jumping', 'cross-country-skiing', 'in-air', 'banknotes', 'iron-age-warrior', 'flash-bang', 'globe-earth', 'treasure-map', 'weber', 'retro-tv', 'tea-cup', 'aquarium', 'soap-dispenser', 'cards', 'r2-d2', 'fraud', 'drama', 'comedy', 'birthday', 'deadly-spray', 'bavarian-pretzel', 'raspberry', 'jelly', 'pizza', 'mcdonalds-french-fries', 'empty-jam-jar', 'eiffel-tower', 'matryoshka', 'german-house', 'tattoo', 'accordion', 'brandenburg-gate', 'chili-pepper', 'viking-ship', 'sombrero', 'sumo', 'origami', 'octopus'];
+
+    const button = document.getElementById('button');
+    const dice = document.querySelectorAll('.img');
+
+    //jQUERY + functionality for mobile phones so that the cubes get dragged by touching the screen 
+
+    $(function () {
+      $(".sortable").sortable();
+      $(".sortable").disableSelection();
+    }
+    );
+
+    !function (a) { function f(a, b) { if (!(a.originalEvent.touches.length > 1)) { a.preventDefault(); var c = a.originalEvent.changedTouches[0], d = document.createEvent("MouseEvents"); d.initMouseEvent(b, !0, !0, window, 1, c.screenX, c.screenY, c.clientX, c.clientY, !1, !1, !1, !1, 0, null), a.target.dispatchEvent(d) } } if (a.support.touch = "ontouchend" in document, a.support.touch) { var e, b = a.ui.mouse.prototype, c = b._mouseInit, d = b._mouseDestroy; b._touchStart = function (a) { var b = this; !e && b._mouseCapture(a.originalEvent.changedTouches[0]) && (e = !0, b._touchMoved = !1, f(a, "mouseover"), f(a, "mousemove"), f(a, "mousedown")) }, b._touchMove = function (a) { e && (this._touchMoved = !0, f(a, "mousemove")) }, b._touchEnd = function (a) { e && (f(a, "mouseup"), f(a, "mouseout"), this._touchMoved || f(a, "click"), e = !1) }, b._mouseInit = function () { var b = this; b.element.bind({ touchstart: a.proxy(b, "_touchStart"), touchmove: a.proxy(b, "_touchMove"), touchend: a.proxy(b, "_touchEnd") }), c.call(b) }, b._mouseDestroy = function () { var b = this; b.element.unbind({ touchstart: a.proxy(b, "_touchStart"), touchmove: a.proxy(b, "_touchMove"), touchend: a.proxy(b, "_touchEnd") }), d.call(b) } } }(jQuery);
+
+    //Rolling the dice 
+    const roll = () => {
+      const picsCopy = pics.slice();
+      var interval = 300;
+      dice.forEach((die, index) => {
+        setTimeout(function () {
+          const [src] = picsCopy.splice(Math.floor(Math.random() * picsCopy.length), 1);
+          die.src = 'https://img.icons8.com/color/96/000000/' + src + '.png';
+        }, index * interval);
+      });
+
+    };
+
+    //toggle select
+    $("#cubes img").click(function () {
+      $(this).toggleClass("selected");
+    });
+
+    //Timer
+    let time;
+
+    function startTimer(duration, display1) {
+      let timer = duration, minutes, seconds;
+      time = setInterval(function () {
+        minutes = parseInt(timer / 60, 10)
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        display1.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+          timer == duration;
+          clearInterval(time);
+          dice.forEach(img => {
+            img.src = "https://img.icons8.com/dotty/80/000000/help.png"
+          })
+        }
+      }, 1000);
+    };
+
+    const countdown = () => {
+      let oneMinute = 60 * 50;
+      display1 = document.getElementById('timer');
+      startTimer(oneMinute, display1);
+    };
+
+    const changeTxt = () => {
+      let text = 'Roll again!';
+      return button.innerHTML = text;
+    }
+
+    const call = () => {
+      clearInterval(time);
+      roll();
+      countdown();
+      changeTxt();
+      $("#cubes img").removeClass("selected");
+    }
+
+    button.onclick = call;
+
+
+
+
+  </script>
+</body>
+
+</html>
